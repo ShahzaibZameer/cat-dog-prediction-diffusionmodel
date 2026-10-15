@@ -76,13 +76,19 @@ def analyse(img, model, feature_model, ref, threshold):
 st.title("🐾 Cat / Dog Detector")
 st.write("Upload a photo. The model says if it is a **cat**, a **dog**, or "
          "**out of distribution** (not a cat or dog).")
+
 st.write("App folder:", BASE_DIR)
-st.write("Files found:", os.listdir(BASE_DIR))
 st.write("Model exists:", os.path.isfile(MODEL_PATH))
 st.write("OOD file exists:", os.path.isfile(OOD_PATH))
-if not (os.path.exists(MODEL_PATH) and os.path.exists(OOD_PATH)):
-    st.error(f"Missing files. Put `{MODEL_PATH}` and `{OOD_PATH}` in the same folder as app.py.")
+
+if not os.path.isfile(MODEL_PATH):
+    st.error(f"Model file not found: {MODEL_PATH}")
     st.stop()
+
+if not os.path.isfile(OOD_PATH):
+    st.error(f"OOD file not found: {OOD_PATH}")
+    st.stop()
+
 
 model, feature_model, ref, threshold = load_assets()
 
