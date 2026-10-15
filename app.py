@@ -52,7 +52,7 @@ def load_assets():
         l for l in model.layers
         if isinstance(l, tf.keras.layers.GlobalAveragePooling2D)
     )
-    feature_model = tf.keras.Model(model.input, gap.output)
+        feature_model = tf.keras.Model(model.input, gap.output)
 
     data = np.load(OOD_PATH)
     return model, feature_model, data["ref"], float(data["threshold"])
