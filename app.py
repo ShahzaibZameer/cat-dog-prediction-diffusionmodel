@@ -37,32 +37,25 @@ st.set_page_config(page_title="Cat / Dog Detector", page_icon="🐾", layout="ce
 #def load_assets():
 # model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 
+
 @st.cache_resource(show_spinner="Loading model...")
 def load_assets():
     try:
         model = tf.keras.models.load_model(
-            MODEL_PATH,
-            compile=False
+            MODEL_PATH, compile=False
         )
     except Exception as e:
         st.error(f"Model loading error: {type(e).__name__}: {e}")
         st.stop()
 
     gap = next(
-        l for l in model.layers
-        if isinstance(l, tf.keras.layers.GlobalAveragePooling2D)
+        layer for layer in model.layers
+        if isinstance(layer, tf.keras.layers.GlobalAveragePooling2D)
     )
-        feature_model = tf.keras.Model(model.input, gap.output)
-
+    feature_model = tf.keras.Model(model.input, gap.output)
     data = np.load(OOD_PATH)
-    return model, feature_model, data["ref"], float(data["threshold"])
 
-gap = next(l for l in model.layers
-               if isinstance(l, tf.keras.layers.GlobalAveragePooling2D))
-    feature_model = tf.keras.Model(model.input, gap.output)  # the "fingerprint" layer
-    data = np.load(OOD_PATH)
     return model, feature_model, data["ref"], float(data["threshold"])
-
 
 def preprocess(img):
     """Same steps as training: RGB, bilinear resize to 160x160, pixel values 0-255."""
